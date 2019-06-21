@@ -12,19 +12,11 @@ void setup() {
 } 
            
 void draw() {                                                                                                                                                                  
-    // clear screen
     background(0);
     
-    // draw circle
     stroke(255,0,0);
     noFill();       
     circle(width/2, height/2, radius*2);                
-    
-    // draw points
-    stroke(255);
-    for (int i=0; i<points.length; i++) {
-        point(points[i].x, points[i].y); 
-    }
     
     lerpAmount += 0.015;
     if (lerpAmount >= 1) {
@@ -32,9 +24,7 @@ void draw() {
        lerpAmount = 0;
     }
      
-    stroke(255,255,0);
     animateTimesTable(timesTable, lerpAmount);
-    //drawTimesTable(2);
 }       
  
 // returns an array of points positions on the circle
@@ -61,6 +51,7 @@ void animateTimesTable(int timesTable, float lerpAmount) {
         float angleProduct = (2 * PI / numPoints) * product;
         float angleNextProduct = (2 * PI / numPoints) * nextProduct;
         
+        // get real angle before finding shortest path
         float colorAngle = lerp(angleProduct, angleNextProduct, lerpAmount);
         
         if (angleProduct < angleNextProduct) {
@@ -82,12 +73,10 @@ void animateTimesTable(int timesTable, float lerpAmount) {
     colorMode(RGB, 255);
 }
 
-
 void drawTimesTable(int timesTable) {
     for (int i=1; i<numPoints; i++) {
         int product = (i * timesTable) % numPoints;
         line(points[i].x, points[i].y, points[product].x, points[product].y);
     }
 }
-
 
