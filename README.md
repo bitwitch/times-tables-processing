@@ -4,6 +4,6 @@
 
 A little Processing program that draws times tables on a circle.  
 
-references:  
-https://www.youtube.com/watch?v=qhbuKbxJsk8
-https://www.redblobgames.com/x/1847-mathologer-modulo-circle/
+references:    
+https://www.youtube.com/watch?v=qhbuKbxJsk8    
+https://www.redblobgames.com/x/1847-mathologer-modulo-circle/   
