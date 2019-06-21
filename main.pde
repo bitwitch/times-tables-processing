@@ -4,7 +4,7 @@ int numPoints = 200;
 float lerpAmount = 0;
 
 void setup() {                                                                
-  size(1248, 600);
+  size(620, 620);
   frameRate(30);
   radius = 250;
   timesTable = 2;
@@ -12,31 +12,29 @@ void setup() {
 } 
            
 void draw() {                                                                                                                                                                  
+    // clear screen
     background(0);
     
+    // draw circle
     stroke(255,0,0);
     noFill();       
     circle(width/2, height/2, radius*2);                
     
-    
-     
+    // draw points
     stroke(255);
-    // draw points                                                                                                                                             
     for (int i=0; i<points.length; i++) {
         point(points[i].x, points[i].y); 
     }
     
-   
-    lerpAmount += 0.01;
+    lerpAmount += 0.015;
     if (lerpAmount >= 1) {
        timesTable = (timesTable + 1) % 300;
        lerpAmount = 0;
     }
-    
-     stroke(255,255,0);
-     drawTimesTable(timesTable, lerpAmount);
-   
-   
+     
+    stroke(255,255,0);
+    animateTimesTable(timesTable, lerpAmount);
+    //drawTimesTable(2);
 }       
  
 // returns an array of points positions on the circle
@@ -52,7 +50,10 @@ PVector[] getPoints(int numPoints, float centerX, float centerY, float radius) {
     return points; 
 }
 
-void drawTimesTable(int timesTable, float lerpAmount) {
+void animateTimesTable(int timesTable, float lerpAmount) {
+    float colorMax = 2*PI;
+    colorMode(HSB, colorMax);
+  
     for (int i=1; i<numPoints; i++) {
         int product = (i * timesTable) % numPoints;
         int nextProduct = (i * (timesTable + 1)) % numPoints;
@@ -60,23 +61,33 @@ void drawTimesTable(int timesTable, float lerpAmount) {
         float angleProduct = (2 * PI / numPoints) * product;
         float angleNextProduct = (2 * PI / numPoints) * nextProduct;
         
-       
-        float angle = lerp(angleProduct, angleNextProduct, lerpAmount);
+        float colorAngle = lerp(angleProduct, angleNextProduct, lerpAmount);
         
-        
-       
-        float destX = radius * cos(angle) + width/2;
-        float destY = radius * sin(angle) + height/2;
-        
-        
-        
-        if (i == 120) {
-           stroke(255);
-        } else {
-           stroke(255, 0, 0); 
+        if (angleProduct < angleNextProduct) {
+            angleNextProduct = angleNextProduct - 2*PI;
         }
+
+        float angle = lerp(angleProduct, angleNextProduct, lerpAmount);
+     
+        float destX = radius * cos(angle) + width/2;
+        float destY = radius * sin(angle) + height/2;   
+        
+        float hue = colorAngle;
+        stroke(hue, colorMax, colorMax);
         
         line(points[i].x, points[i].y, destX, destY);
     }
+    
+    // reset color mode
+    colorMode(RGB, 255);
 }
+
+
+void drawTimesTable(int timesTable) {
+    for (int i=1; i<numPoints; i++) {
+        int product = (i * timesTable) % numPoints;
+        line(points[i].x, points[i].y, points[product].x, points[product].y);
+    }
+}
+
 
